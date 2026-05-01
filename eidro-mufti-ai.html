@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="sq" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eidro Mufti AI — Asistent Islamik Falas</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Cinzel:wght@400;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --g1:#c8a84b;--g2:#e5c76a;--g3:#f5e09a;
+  --j1:#1b6e52;--j2:#27a07a;--j3:#38d49a;
+  --r1:#b83232;--r2:#e05050;
+  --bg:#09090f;--s1:#0f111a;--s2:#161b27;--s3:#1d2335;
+  --gl:rgba(255,255,255,.035);--gl2:rgba(255,255,255,.065);--gl3:rgba(255,255,255,.1);
+  --bd:rgba(255,255,255,.065);--bd2:rgba(200,168,75,.28);--bd3:rgba(200,168,75,.6);
+  --t1:#eae5d8;--t2:#8590a5;--t3:#455068;
+  --ff:'Crimson Pro',serif;--fd:'Cinzel',serif;--fa:'Noto Naskh Arabic',serif;
+  --r:14px;--r2:9px;--r3:6px;
+  --ease:cubic-bezier(.4,0,.2,1);
+}
+[data-theme=light]{
+  --bg:#f0eadb;--s1:#e6dfc9;--s2:#dbd3ba;--s3:#cfc6ab;
+  --gl:rgba(0,0,0,.028);--gl2:rgba(0,0,0,.052);--gl3:rgba(0,0,0,.08);
+  --bd:rgba(0,0,0,.08);--bd2:rgba(150,115,35,.22);--bd3:rgba(150,115,35,.52);
+  --t1:#18120a;--t2:#5a4e2e;--t3:#9a8a60;
+  --g1:#9a7430;--g2:#b89040;--g3:#d0ac60;
+  --j1:#0d5a3e;--j2:#1a8060;--j3:#28b882;
+}
+html,body{height:100%;font-family:var(--ff);background:var(--bg);color:var(--t1);overflow:hidden;transition:background .3s,color .3s}
+button,input,textarea,select{font-family:var(--ff)}
+button{cursor:pointer;border:none;background:none;outline:none}
+input,textarea{outline:none;border:none;background:none}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:99px}
+
+/* INTRO */
+#intro{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transition:opacity .8s var(--ease)}
+#intro.out{opacity:0;pointer-events:none}
+.iseal{position:relative;width:116px;height:116px;display:flex;align-items:center;justify-content:center}
+.ir{position:absolute;inset:0;border:1px solid rgba(200,168,75,.22);border-radius:50%;animation:rspin 16s linear infinite}
+.ir2{position:absolute;inset:11px;border:1px dashed rgba(200,168,75,.1);border-radius:50%;animation:rspin 26s linear infinite reverse}
+.ir3{position:absolute;inset:22px;border:1px dotted rgba(200,168,75,.06);border-radius:50%;animation:rspin 38s linear infinite}
+.icore{width:72px;height:72px;background:linear-gradient(135deg,#c8a84b,#e5c76a);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:34px;box-shadow:0 0 70px rgba(200,168,75,.55),0 0 140px rgba(200,168,75,.22);animation:cpulse 2s ease infinite}
+@keyframes rspin{to{transform:rotate(360deg)}}
+@keyframes cpulse{0%,100%{box-shadow:0 0 70px rgba(200,168,75,.55)}50%{box-shadow:0 0 110px rgba(200,168,75,.85),0 0 200px rgba(200,168,75,.3)}}
+.ibrand{font-family:var(--fd);font-size:2.1rem;font-weight:700;background:linear-gradient(135deg,#c8a84b,#f5e09a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px}
+.iar{font-family:var(--fa);font-size:1.1rem;color:var(--g2);direction:rtl;opacity:.85}
+.itag{font-size:.64rem;color:var(--t3);letter-spacing:3.5px;text-transform:uppercase}
+.ibar{width:170px;height:2px;background:rgba(255,255,255,.05);border-radius:99px;overflow:hidden;margin-top:8px}
+.ifill{height:100%;background:linear-gradient(90deg,#c8a84b,#e5c76a,#c8a84b);background-size:200%;animation:ifill 2.8s ease forwards}
+@keyframes ifill{from{width:0}to{width:100%}}
+.istat{font-size:.66rem;color:var(--t3)}
+
+/* BG */
+#bgwrap{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.gb{position:absolute;border-radius:50%;filter:blur(110px);opacity:.055}
+.sparks{position:fixed;inset:0;z-index:0;pointer-events:none}
+.sp{position:absolute;border-radius:50%;background:rgba(200,168,75,.5);animation:spfl linear infinite}
+@keyframes spfl{0%{transform:translateY(110vh) scale(0);opacity:0}8%{opacity:1}92%{opacity:.4}100%{transform:translateY(-50px) scale(1);opacity:0}}
+#tess{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.018;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpath d='M40 4L76 22L76 58L40 76L4 58L4 22Z' stroke='%23c8a84b' stroke-width='.55' fill='none'/%3E%3Cpath d='M40 16L64 28L64 52L40 64L16 52L16 28Z' stroke='%23c8a84b' stroke-width='.3' fill='none'/%3E%3Ccircle cx='40' cy='40' r='6' stroke='%23c8a84b' stroke-width='.25' fill='none'/%3E%3C/svg%3E");background-size:80px 80px;animation:tdrift 50s linear infinite}
+@keyframes tdrift{to{background-position:80px 80px}}
+
+/* LAYOUT */
+#app{display:flex;height:100vh;position:relative;z-index:1}
+
+/* SIDEBAR */
+#sb{width:275px;flex-shrink:0;background:rgba(9,9,15,.97);border-right:1px solid var(--bd);display:flex;flex-direction:column;backdrop-filter:blur(24px);position:relative;z-index:10;transition:transform .28s var(--ease)}
+[data-theme=light] #sb{background:rgba(240,234,219,.97)}
+.sbh{padding:17px 13px 13px;border-bottom:1px solid var(--bd);flex-shrink:0}
+.lrow{display:flex;align-items:center;gap:10px;margin-bottom:13px}
+.lic{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#c8a84b,#e5c76a);display:flex;align-items:center;justify-content:center;font-size:19px;box-shadow:0 0 20px rgba(200,168,75,.4);flex-shrink:0}
+.lname{font-family:var(--fd);font-size:1rem;background:linear-gradient(135deg,#c8a84b,#f5e09a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:700}
+.lsub{font-size:.57rem;color:var(--t3);letter-spacing:1.8px;text-transform:uppercase}
+.btnnew{width:100%;padding:10px 14px;background:linear-gradient(135deg,#c8a84b,#e5c76a);border-radius:var(--r2);color:#1a1200;font-size:.82rem;font-weight:700;letter-spacing:.5px;display:flex;align-items:center;justify-content:center;gap:7px;transition:.2s var(--ease);box-shadow:0 4px 20px rgba(200,168,75,.32)}
+.btnnew:hover{transform:translateY(-1px);box-shadow:0 8px 30px rgba(200,168,75,.52)}
+.sbsearch{position:relative;margin-top:9px}
+.sbsearch input{width:100%;padding:7px 10px 7px 29px;background:var(--gl);border:1px solid var(--bd);border-radius:var(--r2);color:var(--t1);font-size:.79rem;transition:.2s}
+.sbsearch input:focus{border-color:var(--bd3);background:var(--gl2)}
+.sbsearch input::placeholder{color:var(--t3)}
+.ssi{position:absolute;left:9px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--t3)}
+
+/* FREE BADGE */
+.free-badge{margin-top:9px;padding:6px 10px;background:rgba(27,110,82,.1);border:1px solid rgba(56,212,154,.2);border-radius:var(--r2);font-size:.64rem;color:var(--j3);display:flex;align-items:center;gap:6px;line-height:1.45}
+.fdot{width:5px;height:5px;border-radius:50%;background:var(--j3);flex-shrink:0;animation:dpulse 2s ease infinite}
+@keyframes dpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
+
+.sbnav{padding:9px 7px;border-bottom:1px solid var(--bd)}
+.nsec{font-size:.58rem;color:var(--t3);letter-spacing:2px;text-transform:uppercase;padding:5px 9px 3px}
+.ni{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:var(--r2);cursor:pointer;color:var(--t2);font-size:.8rem;transition:.18s}
+.ni:hover{background:var(--gl2);color:var(--t1)}
+.ni.on{background:var(--gl2);color:var(--g2);border-left:2px solid var(--g1)}
+.nic{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+.nbg{margin-left:auto;padding:2px 7px;border-radius:99px;font-size:.57rem;font-weight:700}
+.nbg.g{background:linear-gradient(135deg,#c8a84b,#e5c76a);color:#1a1200}
+.nbg.j{background:linear-gradient(135deg,#1b6e52,#27a07a);color:#fff}
+
+.sbhist{flex:1;overflow-y:auto;padding:5px 7px;min-height:0}
+.hgrp{font-size:.58rem;color:var(--t3);padding:7px 9px 3px;letter-spacing:1.5px;text-transform:uppercase}
+.hit{display:flex;align-items:center;gap:7px;padding:6px 10px;border-radius:var(--r2);cursor:pointer;font-size:.78rem;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:.18s}
+.hit:hover{background:var(--gl);color:var(--t1)}
+.hd{width:4px;height:4px;border-radius:50%;background:var(--g1);flex-shrink:0;opacity:.5}
+
+.sbfoot{padding:8px 7px;border-top:1px solid var(--bd);flex-shrink:0}
+.disc{padding:7px 9px;background:rgba(200,168,75,.05);border:1px solid rgba(200,168,75,.12);border-radius:var(--r2);font-size:.63rem;color:var(--t3);line-height:1.55;margin-bottom:6px}
+.sfrow{display:flex;align-items:center;gap:8px;padding:6px 9px;border-radius:var(--r2);cursor:pointer;font-size:.78rem;color:var(--t2);transition:.18s}
+.sfrow:hover{background:var(--gl);color:var(--t1)}
+.swm{text-align:center;font-size:.56rem;color:var(--t3);opacity:.5;padding:4px 0}
+
+/* MAIN */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+/* TOPBAR */
+#topbar{display:flex;align-items:center;gap:9px;padding:11px 20px;border-bottom:1px solid var(--bd);background:rgba(9,9,15,.8);backdrop-filter:blur(22px);flex-shrink:0;z-index:5}
+[data-theme=light] #topbar{background:rgba(240,234,219,.85)}
+.ham{width:32px;height:32px;background:var(--gl);border:1px solid var(--bd);border-radius:var(--r2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;transition:.18s;color:var(--t2);flex-shrink:0}
+.ham:hover{border-color:var(--bd3);color:var(--g2)}
+.tbc{flex:1;min-width:0}
+.tbtitle{font-family:var(--fd);font-size:.96rem;color:var(--g1);letter-spacing:.8px}
+.tbsub{font-size:.63rem;color:var(--t3)}
+.tbr{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.ttabs{display:flex;gap:5px;overflow-x:auto}
+.ttabs::-webkit-scrollbar{display:none}
+.tab{flex-shrink:0;padding:5px 11px;border-radius:99px;border:1px solid var(--bd);color:var(--t2);font-size:.71rem;cursor:pointer;transition:.18s;font-family:var(--ff);white-space:nowrap}
+.tab:hover{border-color:var(--bd3);color:var(--g2)}
+.tab.on{background:var(--g1);color:#1a1200;border-color:var(--g1);font-weight:600}
+.ib{width:32px;height:32px;background:var(--gl);border:1px solid var(--bd);border-radius:var(--r2);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;transition:.18s;color:var(--t2)}
+.ib:hover{border-color:var(--bd3);color:var(--g2);background:var(--gl2)}
+.status-pill{display:flex;align-items:center;gap:5px;padding:4px 10px;background:var(--gl);border:1px solid var(--bd2);border-radius:99px;font-size:.68rem;color:var(--g1)}
+.sdot{width:5px;height:5px;border-radius:50%;background:var(--j3);flex-shrink:0;animation:dpulse 2.2s ease infinite}
+.sdot.busy{background:var(--g3);animation:dpulse .7s ease infinite}
+.thpill{display:flex;align-items:center;gap:5px;padding:5px 10px;background:var(--gl);border:1px solid var(--bd);border-radius:99px;cursor:pointer;font-size:.7rem;color:var(--t2);transition:.18s;font-family:var(--ff)}
+.thpill:hover{border-color:var(--bd3);color:var(--g2)}
+
+/* CHAT */
+#chat{flex:1;overflow-y:auto;padding:22px 20px;scroll-behavior:smooth}
+
+/* WELCOME */
+#welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:75vh;gap:26px;text-align:center;animation:wup .65s ease}
+@keyframes wup{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.wseal{position:relative;width:90px;height:90px;display:flex;align-items:center;justify-content:center}
+.wr{position:absolute;inset:0;border:1px solid rgba(200,168,75,.2);border-radius:50%;animation:rspin 20s linear infinite}
+.wr2{position:absolute;inset:10px;border:1px dashed rgba(200,168,75,.09);border-radius:50%;animation:rspin 34s linear infinite reverse}
+.wcr{width:68px;height:68px;background:linear-gradient(135deg,#c8a84b,#e5c76a);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:31px;box-shadow:0 0 55px rgba(200,168,75,.32)}
+.war{font-family:var(--fa);font-size:1.3rem;color:var(--g2);direction:rtl;text-shadow:0 0 28px rgba(200,168,75,.3);line-height:2}
+.wtitle{font-family:var(--fd);font-size:1.85rem;font-weight:700;background:linear-gradient(135deg,#c8a84b,#f5e09a);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.wdesc{color:var(--t2);font-size:.9rem;max-width:490px;line-height:1.82;font-style:italic}
+.wpow{display:flex;align-items:center;gap:7px;padding:5px 14px;border-radius:99px;border:1px solid var(--bd2);background:rgba(200,168,75,.06);font-size:.7rem;color:var(--g1)}
+.wdisc{background:rgba(200,168,75,.055);border:1px solid rgba(200,168,75,.14);border-radius:var(--r2);padding:9px 15px;font-size:.71rem;color:var(--t3);max-width:490px;line-height:1.58}
+
+/* API STATUS */
+.api-info{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.api-chip{display:flex;align-items:center;gap:5px;padding:4px 11px;border-radius:99px;border:1px solid var(--bd2);background:var(--gl);font-size:.67rem;color:var(--t2)}
+.api-chip .dot{width:5px;height:5px;border-radius:50%;background:var(--j3)}
+.api-chip .dot.loading{background:var(--g3);animation:dpulse .8s ease infinite}
+.api-chip .dot.err{background:var(--r2)}
+
+/* PROMPT GRID */
+.pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;width:100%;max-width:740px}
+.pc{background:var(--gl);border:1px solid var(--bd);border-radius:var(--r);padding:13px 12px;cursor:pointer;text-align:left;transition:.22s;position:relative;overflow:hidden}
+.pc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#c8a84b,#38d49a,#c8a84b);opacity:0;transition:.22s}
+.pc:hover{background:var(--gl2);border-color:var(--bd3);transform:translateY(-2px);box-shadow:0 0 28px rgba(200,168,75,.12)}
+.pc:hover::before{opacity:1}
+.pcic{font-size:20px;margin-bottom:6px}
+.pccat{font-size:.58rem;color:var(--g1);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:3px;font-weight:600}
+.pctxt{font-size:.77rem;color:var(--t2);line-height:1.45}
+
+/* CHIPS */
+.chips{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;max-width:700px}
+.chip{padding:5px 12px;border-radius:99px;border:1px solid var(--bd2);background:var(--gl);color:var(--t2);font-size:.72rem;cursor:pointer;transition:.18s;font-family:var(--ff)}
+.chip:hover{border-color:var(--bd3);color:var(--g2);background:var(--gl2);transform:translateY(-1px)}
+
+/* MESSAGES */
+.mwrap{display:flex;flex-direction:column;gap:20px}
+.msg{display:flex;gap:11px;animation:min .38s ease}
+@keyframes min{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.msg.user{flex-direction:row-reverse;margin-left:auto;max-width:640px}
+.msg.ai{max-width:840px;width:100%}
+.av{width:35px;height:35px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.msg.ai .av{background:linear-gradient(135deg,#c8a84b,#e5c76a);color:#1a1200;box-shadow:0 0 16px rgba(200,168,75,.3)}
+.msg.user .av{background:linear-gradient(135deg,#1b6e52,#27a07a);color:#fff}
+.mb{flex:1;min-width:0}
+.mn{font-size:.62rem;color:var(--t3);margin-bottom:5px;display:flex;align-items:center;gap:5px}
+.mv{color:var(--g1);font-size:10px}
+.bub{padding:14px 18px;border-radius:var(--r);line-height:1.84;font-size:.9rem}
+.msg.ai .bub{background:var(--gl);border:1px solid var(--bd);backdrop-filter:blur(10px)}
+.msg.user .bub{background:linear-gradient(135deg,rgba(200,168,75,.13),rgba(200,168,75,.06));border:1px solid var(--bd2)}
+
+/* RICH CONTENT (used by engine) */
+.bub .verdict{display:inline-flex;align-items:center;gap:7px;padding:7px 15px;border-radius:var(--r2);font-size:.84rem;font-weight:600;margin-bottom:9px;letter-spacing:.3px}
+.bub .vhalal{background:rgba(27,110,82,.16);border:1px solid rgba(56,212,154,.38);color:#38d49a}
+.bub .vharam{background:rgba(184,50,50,.14);border:1px solid rgba(224,80,80,.38);color:#e05050}
+.bub .vmakruh{background:rgba(200,168,75,.11);border:1px solid rgba(200,168,75,.36);color:var(--g2)}
+.bub .vwajib{background:rgba(27,110,82,.16);border:1px solid rgba(56,212,154,.38);color:#38d49a}
+.bub .vmubah{background:rgba(100,150,240,.11);border:1px solid rgba(100,150,240,.32);color:#8ab4f8}
+.bub .vopen{background:var(--gl);border:1px solid var(--bd2);color:var(--t2)}
+
+.bub .aq{font-family:var(--fa);font-size:1.1rem;color:var(--g2);direction:rtl;text-align:right;line-height:2.3;display:block;margin:10px 0 4px;padding:10px 14px;background:rgba(200,168,75,.07);border-right:3px solid var(--g1);border-radius:0 var(--r2) var(--r2) 0}
+.bub .atr{font-size:.82rem;font-style:italic;color:var(--t2);display:block;margin-bottom:9px;padding-left:3px}
+
+.bub .sect{margin-top:13px;padding-top:13px;border-top:1px solid var(--bd)}
+.bub .stitle{font-size:.66rem;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.bub .stg{color:var(--g2)}
+.bub .stj{color:var(--j3)}
+.bub .sts{color:var(--t2)}
+
+.bub .refs{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
+.bub .ref{display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:99px;background:rgba(200,168,75,.09);border:1px solid rgba(200,168,75,.22);font-size:.69rem;color:var(--g1)}
+
+.bub .madhabs{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:7px}
+.bub .md{padding:9px 11px;border-radius:var(--r2);border:1px solid var(--bd);background:var(--gl);transition:.18s}
+.bub .md:hover{background:var(--gl2);border-color:var(--bd2)}
+.bub .mh{font-size:.63rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
+.bub .mh.h{color:#6495ed}
+.bub .mh.s{color:#38d49a}
+.bub .mh.m{color:#f0a843}
+.bub .mh.b{color:#e05050}
+.bub .mt{font-size:.77rem;color:var(--t2);line-height:1.62}
+
+/* LIVE API RESULT */
+.bub .qblock{margin-top:10px;padding:11px 14px;background:rgba(200,168,75,.07);border:1px solid rgba(200,168,75,.2);border-radius:var(--r2)}
+.bub .qlabel{font-size:.59rem;font-weight:700;letter-spacing:1.5px;color:var(--g1);text-transform:uppercase;margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.bub .qlabel::after{content:'LIVE API';font-size:.52rem;padding:1px 5px;background:rgba(56,212,154,.14);border:1px solid rgba(56,212,154,.28);border-radius:99px;color:var(--j3)}
+.bub .qar{font-family:var(--fa);font-size:1.08rem;color:var(--g2);direction:rtl;text-align:right;line-height:2.2;display:block}
+.bub .qtr{font-size:.8rem;color:var(--t2);font-style:italic;margin-top:5px;line-height:1.65}
+.bub .qmeta{font-size:.65rem;color:var(--t3);margin-top:5px}
+
+.bub .hblock{margin-top:10px;padding:11px 14px;background:rgba(27,110,82,.06);border:1px solid rgba(56,212,154,.17);border-radius:var(--r2)}
+.bub .hlabel{font-size:.59rem;font-weight:700;letter-spacing:1.5px;color:var(--j3);text-transform:uppercase;margin-bottom:7px;display:flex;align-items:center;gap:6px}
+.bub .hlabel::after{content:'LIVE API';font-size:.52rem;padding:1px 5px;background:rgba(56,212,154,.14);border:1px solid rgba(56,212,154,.28);border-radius:99px;color:var(--j3)}
+.bub .htxt{font-size:.82rem;color:var(--t2);line-height:1.72;font-style:italic}
+.bub .hmeta{font-size:.65rem;color:var(--t3);margin-top:5px}
+
+.bub .disclaim{margin-top:12px;padding:8px 12px;background:rgba(200,168,75,.055);border:1px solid rgba(200,168,75,.13);border-radius:var(--r2);font-size:.7rem;color:var(--t3);line-height:1.55}
+
+/* THINKING */
+.thinking{display:flex;align-items:center;gap:10px;padding:12px 15px;background:var(--gl);border:1px solid var(--bd);border-radius:var(--r);width:fit-content}
+.tdots{display:flex;gap:5px}
+.tdot{width:7px;height:7px;border-radius:50%;background:var(--g1);animation:tdb 1.3s ease infinite}
+.tdot:nth-child(2){animation-delay:.16s}
+.tdot:nth-child(3){animation-delay:.32s}
+@keyframes tdb{0%,60%,100%{transform:translateY(0);opacity:.35}30%{transform:translateY(-8px);opacity:1}}
+.tlab{font-size:.75rem;color:var(--t3);font-style:italic}
+
+/* MSG ACTIONS */
+.macts{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap}
+.ma{padding:3px 9px;border-radius:var(--r3);border:1px solid var(--bd);font-size:.69rem;color:var(--t3);cursor:pointer;transition:.18s;font-family:var(--ff)}
+.ma:hover{background:var(--gl);color:var(--t1);border-color:var(--bd2)}
+.ma.liked{color:var(--j3);border-color:rgba(56,212,154,.4)}
+.ma.disliked{color:var(--r2);border-color:rgba(224,80,80,.4)}
+
+/* INPUT */
+#inputzone{padding:13px 20px 18px;border-top:1px solid var(--bd);background:rgba(9,9,15,.75);backdrop-filter:blur(22px);flex-shrink:0}
+[data-theme=light] #inputzone{background:rgba(240,234,219,.85)}
+.iw{display:flex;align-items:flex-end;gap:7px;background:var(--gl);border:1px solid var(--bd);border-radius:var(--r);padding:10px 12px;transition:.22s}
+.iw:focus-within{border-color:var(--bd3);background:var(--gl2);box-shadow:0 0 0 3px rgba(200,168,75,.09)}
+.iw textarea{flex:1;color:var(--t1);font-size:.9rem;resize:none;max-height:128px;min-height:22px;line-height:1.64}
+.iw textarea::placeholder{color:var(--t3)}
+.ibtns{display:flex;gap:5px;align-items:flex-end;flex-shrink:0}
+.ibb{width:31px;height:31px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;transition:.18s;color:var(--t3);border:1px solid transparent}
+.ibb:hover{color:var(--g2);background:var(--gl2);border-color:var(--bd2)}
+.sendbtn{width:37px;height:37px;border-radius:9px;background:linear-gradient(135deg,#c8a84b,#e5c76a);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;transition:.22s;color:#1a1200;box-shadow:0 4px 18px rgba(200,168,75,.4)}
+.sendbtn:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(200,168,75,.58)}
+.sendbtn:disabled{opacity:.38;cursor:not-allowed;transform:none;box-shadow:none}
+.infoline{display:flex;justify-content:space-between;align-items:center;margin-top:6px;padding:0 2px}
+.infoline span{font-size:.64rem;color:var(--t3)}
+.livind{display:flex;align-items:center;gap:5px}
+.livdot{width:5px;height:5px;border-radius:50%;background:var(--j3);animation:dpulse 2.2s ease infinite}
+.livdot.busy{background:var(--g3);animation:dpulse .7s ease infinite}
+
+/* MODALS */
+.ov{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.8);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:16px}
+.ov.open{display:flex}
+.modal{background:var(--s1);border:1px solid var(--bd);border-radius:18px;padding:26px;max-width:570px;width:100%;max-height:84vh;overflow-y:auto;box-shadow:0 35px 100px rgba(0,0,0,.65);animation:mpop .28s ease}
+@keyframes mpop{from{opacity:0;transform:scale(.94) translateY(8px)}to{opacity:1;transform:scale(1)}}
+.mh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px}
+.mtitle{font-family:var(--fd);font-size:1.12rem;color:var(--g1)}
+.mclose{width:27px;height:27px;background:var(--gl2);border:1px solid var(--bd);border-radius:7px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--t2);font-size:13px;transition:.18s}
+.mclose:hover{color:var(--t1)}
+.modal p{color:var(--t2);font-size:.86rem;line-height:1.84;margin-bottom:9px}
+.modal h3{color:var(--g2);font-size:.88rem;font-weight:600;margin:13px 0 5px}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;z-index:600;background:var(--s2);border:1px solid var(--bd2);border-radius:10px;padding:10px 15px;font-size:.79rem;color:var(--t1);box-shadow:0 10px 40px rgba(0,0,0,.6);animation:tin .3s ease;max-width:310px;pointer-events:none}
+@keyframes tin{from{opacity:0;transform:translateY(7px)}}
+
+#footer{position:fixed;bottom:0;left:50%;transform:translateX(-50%);font-size:.55rem;color:rgba(69,80,104,.35);z-index:0;pointer-events:none;white-space:nowrap;padding-bottom:3px;letter-spacing:.5px}
+
+@media(max-width:860px){
+  #sb{position:absolute;left:0;height:100%;transform:translateX(-100%);transition:transform .28s var(--ease)}
+  #sb.open{transform:translateX(0)}
+  .pgrid{grid-template-columns:repeat(2,1fr)}
+  .bub .madhabs{grid-template-columns:1fr}
+  .ttabs{display:none}
+}
+@media(max-width:440px){.pgrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div id="bgwrap">
+  <div class="gb" style="width:580px;height:580px;background:radial-gradient(circle,#c8a84b,transparent);top:-140px;right:-90px"></div>
+  <div class="gb" style="width:480px;height:480px;background:radial-gradient(circle,#1b6e52,transparent);bottom:-110px;left:-90px"></div>
+  <div class="gb" style="width:320px;height:320px;background:radial-gradient(circle,#c8a84b,transparent);top:45%;left:35%"></div>
+</div>
+<div id="tess"></div>
+<div class="sparks" id="sparks"></div>
+
+<!-- INTRO -->
+<div id="intro">
+  <div class="iseal">
+    <div class="ir"></div><div class="ir2"></div><div class="ir3"></div>
+    <div class="icore">⚖️</div>
+  </div>
+  <div class="ibrand">Eidro Mufti AI</div>
+  <div class="iar">الْعِلْمُ نُورٌ وَالْجَهْلُ ظُلْمَةٌ</div>
+  <div class="itag">Asistent Islamik · 100% Falas</div>
+  <div class="ibar"><div class="ifill"></div></div>
+  <div class="istat" id="istat">Duke lidhur me Quran &amp; Hadith APIs...</div>
+</div>
+
+<div id="app">
+
+<!-- SIDEBAR -->
+<aside id="sb">
+  <div class="sbh">
+    <div class="lrow">
+      <div class="lic">⚖️</div>
+      <div><div class="lname">Eidro Mufti AI</div><div class="lsub">Islamic AI · Free</div></div>
+    </div>
+    <button class="btnnew" onclick="newChat()">＋ &nbsp;Pyetje e Re</button>
+    <div class="sbsearch">
+      <span class="ssi">🔍</span>
+      <input type="text" placeholder="Kërko bisedat..." oninput="filterHist(this.value)">
+    </div>
+    <div class="free-badge">
+      <div class="fdot"></div>
+      <span>100% Falas · Pa API key · Pa pagesë · AlQuran + Hadith APIs aktive</span>
+    </div>
+  </div>
+
+  <div class="sbnav">
+    <div class="nsec">Kategoritë</div>
+    <div class="ni on" onclick="navSel(this)"><span class="nic">⚖️</span>Të gjitha<span class="nbg g">LIVE</span></div>
+    <div class="ni" onclick="navSel(this);ask('Çfarë është hallall dhe haram? Tregom parimet bazë islame.')"><span class="nic">✅</span>Hallall &amp; Haram</div>
+    <div class="ni" onclick="navSel(this);ask('Çfarë është fikhu islamik dhe si ndihmon besimtarin në jetën e përditshme?')"><span class="nic">📚</span>Fikh &amp; Hukum</div>
+    <div class="ni" onclick="navSel(this);ask('Çfarë mëson Islami rreth besimit dhe akides islame?')"><span class="nic">🌙</span>Akide &amp; Besim</div>
+    <div class="ni" onclick="navSel(this);ask('Si falen pesë namazet ditore dhe cilat janë kushtet e tyre?')"><span class="nic">🕌</span>Namaz &amp; Ibadet</div>
+    <div class="ni" onclick="navSel(this);ask('Çfarë thotë Islami për martesën dhe familjen myslimane?')"><span class="nic">💍</span>Martesë &amp; Familje</div>
+    <div class="ni" onclick="openMod('aboutMod')"><span class="nic">ℹ️</span>Rreth Eidro AI</div>
+  </div>
+
+  <div class="sbhist" id="histList">
+    <div class="hgrp">Të fundit</div>
+    <div class="hit" onclick="ask('A lejohet kamata bankare në Islam?')"><span class="hd"></span>Kamata bankare</div>
+    <div class="hit" onclick="ask('Cilat janë rregullat e zekatit dhe si llogaritet?')"><span class="hd"></span>Rregullat e zekatit</div>
+    <div class="hit" onclick="ask('Çfarë është shirku dhe cilat janë llojet e tij?')"><span class="hd"></span>Shirku dhe llojet</div>
+    <div class="hit" onclick="ask('Si bëhet teube e saktë sipas Islamit?')"><span class="hd"></span>Teube dhe pendimi</div>
+    <div class="hit" onclick="ask('A është gjynah muzika sipas Islamit?')"><span class="hd"></span>Muzika në Islam</div>
+    <div class="hgrp">Klasike</div>
+    <div class="hit" onclick="ask('Cilat janë pesë shtyllat e Islamit?')"><span class="hd"></span>5 Shtyllat</div>
+    <div class="hit" onclick="ask('Cilat janë rekatet e pesë namazeve?')"><span class="hd"></span>Rekatet e namazit</div>
+    <div class="hit" onclick="ask('Çfarë janë kushtet e agjërimit të saktë?')"><span class="hd"></span>Kushtet e agjërimit</div>
+    <div class="hit" onclick="ask('Cili është gjykimi i tatuazhit në Islam?')"><span class="hd"></span>Tatuazhi në Islam</div>
+  </div>
+
+  <div class="sbfoot">
+    <div class="disc">⚠️ Informacion edukativ islamik. Konsultohuni me dijetar të kualifikuar për çështje fetare me peshë.</div>
+    <div class="sfrow" onclick="exportChat()"><span>📤</span>Eksporto bisedën</div>
+    <div class="sfrow" onclick="openMod('privMod')"><span>🔒</span>Privatësia</div>
+    <div class="swm">Eidro AI by Erind Roci</div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main id="main">
+  <div id="topbar">
+    <div class="ham" onclick="document.getElementById('sb').classList.toggle('open')">☰</div>
+    <div class="tbc">
+      <div class="tbtitle">Eidro Mufti AI</div>
+      <div class="tbsub">Quran API + Hadith API · 100% Falas · Pa API Key</div>
+    </div>
+    <div class="tbr">
+      <div class="ttabs">
+        <button class="tab on" onclick="tabSel(this)">✅ Hallall/Haram</button>
+        <button class="tab" onclick="tabSel(this)">📚 Fikh</button>
+        <button class="tab" onclick="tabSel(this)">🌙 Akide</button>
+        <button class="tab" onclick="tabSel(this)">🕌 Namaz</button>
+        <button class="tab" onclick="tabSel(this)">🌙 Agjërim</button>
+        <button class="tab" onclick="tabSel(this)">💰 Zekat</button>
+      </div>
+      <div class="status-pill">
+        <div class="sdot" id="sdot"></div>
+        <span id="slbl">Live · Falas</span>
+      </div>
+      <div class="ib" onclick="exportChat()" title="Eksporto">📤</div>
+      <div class="thpill" onclick="toggleTheme()"><span id="thic">🌙</span>&nbsp;<span id="thlbl">Natë</span></div>
+    </div>
+  </div>
+
+  <div id="chat">
+    <div id="chatMsgs"></div>
+    <div id="welcome">
+      <div class="wseal">
+        <div class="wr"></div><div class="wr2"></div>
+        <div class="wcr">⚖️</div>
+      </div>
+      <div class="war">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+      <div class="wtitle">Eidro Mufti AI</div>
+      <div class="wdesc">Pyesni çdo pyetje fetare islame dhe merrni përgjigje të strukturuara me vargje të gjalla nga Kurani dhe Hadithi.</div>
+      <div class="wpow"><div class="fdot"></div>AlQuran.cloud · Hadith CDN · 100% Falas · Pa API Key</div>
+      <div class="api-info" id="apiInfo">
+        <div class="api-chip"><div class="dot loading" id="dotQuran"></div><span id="lblQuran">AlQuran API...</span></div>
+        <div class="api-chip"><div class="dot loading" id="dotHadith"></div><span id="lblHadith">Hadith API...</span></div>
+        <div class="api-chip"><div class="dot" style="background:var(--j3)"></div><span>Knowledge Base · Aktive</span></div>
+      </div>
+      <div class="wdisc">⚠️ Ky asistent ofron informacion edukativ islamik. Konsultohuni me dijetar të kualifikuar për vendime të rëndësishme fetare.</div>
+
+      <div class="pgrid">
+        <div class="pc" onclick="ask('A është hallall të punosh si programues softueri dhe të ndërtosh aplikacione për kompani të ndryshme?')"><div class="pcic">✅</div><div class="pccat">Hallall &amp; Haram</div><div class="pctxt">A lejohet kjo punë apo veprim sipas Islamit?</div></div>
+        <div class="pc" onclick="ask('A prishet agjërimi i Ramazanit nëse pi ujë pa dashje duke harruar?')"><div class="pcic">🌙</div><div class="pccat">Agjërim</div><div class="pctxt">A prishet agjërimi nëse... rregullat e sakta</div></div>
+        <div class="pc" onclick="ask('A lejohet marrja e kredisë bankare me interes (kamata) sipas Islamit?')"><div class="pcic">💰</div><div class="pccat">Financa Islame</div><div class="pctxt">A lejohet kamata dhe kredia bankare?</div></div>
+        <div class="pc" onclick="ask('Çfarë është shirku, cilat janë llojet e tij dhe pse është gjynahu më i madh?')"><div class="pcic">🌙</div><div class="pccat">Akide</div><div class="pctxt">Shirku — llojet dhe rëndësia</div></div>
+        <div class="pc" onclick="ask('Si bëhet teubeja e saktë sipas Islamit dhe cilat janë kushtet e pranimit?')"><div class="pcic">🤲</div><div class="pccat">Pendim</div><div class="pctxt">Si bëhet teube e vërtetë?</div></div>
+        <div class="pc" onclick="ask('Çfarë thonë Kurani dhe hadithi për respektin ndaj prindërve?')"><div class="pcic">👨‍👩‍👦</div><div class="pccat">Familja</div><div class="pctxt">Ajete dhe hadithe për prindërit</div></div>
+        <div class="pc" onclick="ask('Cilat janë rregullat e zekatit, cili është nisabi dhe si llogaritet?')"><div class="pcic">📊</div><div class="pccat">Zekat</div><div class="pctxt">Rregullat, nisabi dhe llogaritja</div></div>
+        <div class="pc" onclick="ask('A është gjynah të dëgjosh muzikë? Cilat janë mendimet e katër medhhebeve?')"><div class="pcic">🎵</div><div class="pccat">Çështje Moderne</div><div class="pctxt">Gjykimi islamik mbi muzikën</div></div>
+      </div>
+      <div class="chips">
+        <div class="chip" onclick="ask('Cili është gjykimi islamik për fotografinë?')">📸 Fotografitë</div>
+        <div class="chip" onclick="ask('Cili është gjykimi islamik për tatuazhin?')">✒️ Tatuazhi</div>
+        <div class="chip" onclick="ask('A lejohet blerja e Bitcoin sipas Islamit?')">₿ Bitcoin</div>
+        <div class="chip" onclick="ask('Rregullat e hixhabit sipas katër medhhebeve')">🧕 Hixhabi</div>
+        <div class="chip" onclick="ask('A lejohet sigurimi i jetës në Islam?')">🛡️ Sigurimi</div>
+        <div class="chip" onclick="ask('Çfarë thotë Islami për divorcin?')">💍 Divorci</div>
+        <div class="chip" onclick="ask('Pesë shtyllat e Islamit dhe kuptimi i tyre')">🕋 5 Shtyllat</div>
+        <div class="chip" onclick="ask('Cili është gjykimi i aborsionit sipas Islamit?')">⚕️ Aborcion</div>
+        <div class="chip" onclick="ask('A lejohet loja me bixhoz në Islam?')">🎰 Bixhozi</div>
+        <div class="chip" onclick="ask('Çfarë janë emrat e bukur të Allahut Esmaul Husna?')">✨ Esmaul Husna</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="inputzone">
+    <div class="iw">
+      <textarea id="uInput" placeholder="Pyesni çdo gjë rreth Islamit — hallall/haram, namaz, agjërim, Kuran, hadith, moral, familje, fikh..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+      <div class="ibtns">
+        <div class="ibb" onclick="speakLast()" title="Dëgjo">🔊</div>
+        <button class="sendbtn" id="sendBtn" onclick="sendMsg()">▶</button>
+      </div>
+    </div>
+    <div class="infoline">
+      <span>Enter = dërgo · Shift+Enter = rresht · AlQuran API + Hadith API · Falas</span>
+      <span class="livind"><div class="livdot" id="livdot"></div><span id="livlbl">Eidro Mufti AI · Online</span></span>
+    </div>
+  </div>
+</main>
+</div>
+
+<!-- MODALS -->
+<div class="ov" id="aboutMod">
+  <div class="modal">
+    <div class="mh"><div class="mtitle">⚖️ Rreth Eidro Mufti AI</div><div class="mclose" onclick="closeMod('aboutMod')">✕</div></div>
+    <p>Eidro Mufti AI është platforma islame shqipfolëse 100% falas, pa API key dhe pa pagesë. Ndërtuar mbi burime islame të hapura.</p>
+    <h3>📡 API-të e Gjalla (Falas)</h3>
+    <p><strong>AlQuran.cloud</strong> — Kurani i plotë me 90+ përkthime, CORS-enabled, pa auth<br>
+    <strong>Hadith CDN (fawazahmed0)</strong> — Të gjitha koleksionet kryesore hadithi, CDN falas<br>
+    <strong>Knowledge Base</strong> — Bazë e dijes islame e ndërtuar brenda aplikacionit</p>
+    <h3>⚠️ Disclaimer</h3>
+    <p>Ky asistent ofron <strong>informacion edukativ islamik</strong>. Nuk zëvendëson konsultimin me dijetar të kualifikuar.</p>
+    <p style="font-size:.71rem;color:var(--t3);margin-top:14px">Eidro Mufti AI v5.0 · AlQuran.cloud + Hadith CDN · Created by Erind Roci · © 2026</p>
+  </div>
+</div>
+<div class="ov" id="privMod">
+  <div class="modal">
+    <div class="mh"><div class="mtitle">🔒 Privatësia</div><div class="mclose" onclick="closeMod('privMod')">✕</div></div>
+    <p>Asnjë të dhënë nuk ruhet. Nuk nevojitet llogari. Bisedat mbeten vetëm në browser tuaj.</p>
+    <p>API calls bëhen direkt nga browser juaj te AlQuran.cloud dhe jsDelivr CDN — serverët tanë nuk shohin asgjë.</p>
+    <p style="font-size:.71rem;color:var(--t3);margin-top:14px">© 2026 Eidro Mufti AI — Created by Erind Roci — All Rights Reserved</p>
+  </div>
+</div>
+
+<div id="footer">© 2026 Eidro Mufti AI &nbsp;|&nbsp; Created by Erind Roci &nbsp;|&nbsp; All Rights Reserved</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   EIDRO MUFTI AI — ENGINE v5.0
+   100% FREE · No API Key · AlQuran.cloud + Hadith CDN
+═══════════════════════════════════════════════════════ */
+
+// ── FREE API ENDPOINTS ──
+const QURAN_API  = 'https://api.alquran.cloud/v1';
+const HADITH_CDN = 'https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions';
+
+// ── STATE ──
+let msgs=[], busy=false, mc=0, tc=0;
+
+// ── KNOWLEDGE BASE ──
+// Each entry: keys[], verdict, arabic, arabicTr, base, refs[], madhabs{}, quranRef{s,a}, hadithRef{col,num}
+const KB = [
+/* ── KAMATA / RIBA ── */
+{
+  keys:['kamat','interes','ribë','rib','kredi bank','hua me interes','hua bankare','financ','bank','banka'],
+  verdict:'haram',
+  arabic:'وَأَحَلَّ اللَّهُ الْبَيْعَ وَحَرَّمَ الرِّبَا',
+  arabicTr:'Allahu ka lejuar shitblerjen dhe ka ndaluar ribën.',
+  base:`Kamata (<strong>Riba</strong>) është shprehimisht e ndaluar në Kuranin Fisnik dhe konsiderohet si një ndër gjynahet më të rënda. Allahu ﷻ e ka ndaluar atë katëgorish dhe ka shpallur luftë ndaj atij që e vazhdon.<br><br>
+
+<strong>Llojet e Ribës:</strong><br>
+• <strong>Riba en-Nesia</strong> — Shtimi i borxhit për shkak të vonesës në kthim (forma e kredisë bankare moderne)<br>
+• <strong>Riba el-Fadl</strong> — Shkëmbimi i mallrave të njëjtit lloj në sasi të pabarabarta<br><br>
+
+Kredinë bankare me interes të fiksuar është unanimisht <strong>Haram</strong> sipas të katër medhhebeve. Alternativa islame janë kontratat Murabaha, Mudarebe dhe Mushareke, të ofruara nga bankat islame.`,
+  refs:['El-Bekare 2:275','El-Bekare 2:278-279','Al-Imran 3:130','Sahih Buhari 2086','Sahih Muslim 1598'],
+  quranRef:{s:2,a:275},
+  hadithRef:{col:'bukhari',num:2086},
+  madhabs:{
+    h:'Hanefijtë e ndalojnë çdo formë Riba. Lejojnë kontratat alternative islame si Murabaha dhe Ijarah.',
+    s:'Shafi\'ijtë janë shumë striktë — çdo shtim i paracaktuar mbi borxh është Riba dhe haram pa asnjë përjashtim.',
+    m:'Malikitë e ndalojnë Ribën në të gjitha format e saj. Lejojnë disa transaksione tregtare me kushte shumë specifike.',
+    b:'Hanbelijtë e ndalojnë kategorikisht. Ibn Tejmijje dhe Ibn Kajimi kanë shkruar gjerësisht kundër Ribës moderne.'
+  }
+},
+/* ── SHIRK ── */
+{
+  keys:['shirk','shrik','idhujtari','politeiz','shoqër','zot tjetër','idhull','shirku'],
+  verdict:'haram',
+  arabic:'إِنَّ اللَّهَ لَا يَغْفِرُ أَن يُشْرَكَ بِهِ وَيَغْفِرُ مَا دُونَ ذَٰلِكَ لِمَن يَشَاءُ',
+  arabicTr:'Allahu nuk falë që t\'i shoqërohet shok, por falë çdo gjë tjetër pos kësaj për kë dëshiron.',
+  base:`Shirku është gjynahu më i madh në Islam dhe i vetmi gjynah që — nëse personi vdes pa u penduar — nuk falet nga Allahu. Shirku do të thotë t\'i shoqërosh Allahut shok ose rival në adhurim, hyjni ose cilësi hyjnore.<br><br>
+
+<strong>Llojet e Shirkut:</strong><br>
+• <strong>Shirk Ekber (i Madh)</strong> — e nxjerr nga Islami: adhurimi i idhujve, besimi se dikush tjetër është hyjni, lutja drejtuar të vdekurve si zotëve<br>
+• <strong>Shirk Esger (i Vogël)</strong> — nuk e nxjerr nga Islami por është gjynah i madh: syefaqësia (ria), betimi në dikë tjetër pos Allahut<br>
+• <strong>Shirk Khafi (i Fshehtë)</strong> — shirku i zemrës: mbështetja e tepruar tek krijesat pa iu kthyer Allahut`,
+  refs:['En-Nisa 4:48','El-Maida 5:72','Luqman 31:13','Sahih Buhari 3456','Sahih Muslim 92'],
+  quranRef:{s:4,a:48},
+  hadithRef:{col:'bukhari',num:3456},
+  madhabs:{
+    h:'Hanefijtë e ndalojnë çdo formë Shirku Ekber. Trajtojnë me kujdes çështjet si tevessuli, duke dalluar format e lejuara nga ato jo të lejuara.',
+    s:'Shafi\'ijtë e ndalojnë çdo formë Shirku kategorikisht. Tevessuli nëpërmjet Profetit ﷺ lejohet vetëm në formën e duhur.',
+    m:'Malikitë janë të rreptë ndaj çdo praktike që mund të çojë drejt Shirkut. Zbatojnë parimin Sed edh-Dheria\'a.',
+    b:'Hanbelijtë, sidomos shkolla e Ibn Tejmijes, janë shumë striktë kundër çdo forme Shirku, duke përfshirë vizitat e tepruara të varrezave me besime të gabuara.'
+  }
+},
+/* ── TEUBE ── */
+{
+  keys:['teube','tobe','pendim','pendohem','penduar','fal gjyna','si falem','gabu','mëkat','mëkate'],
+  verdict:'wajib',
+  arabic:'يَا أَيُّهَا الَّذِينَ آمَنُوا تُوبُوا إِلَى اللَّهِ تَوْبَةً نَصُوحًا',
+  arabicTr:'O ju që besoni! Pendohuni tek Allahu me pendim të sinqertë.',
+  base:`Teubja (Pendimi) është detyrë (<strong>Vaxhib</strong>) dhe Allahu e pranon teubjen e sinqertë nga çdo rob të Tij. Profeti ﷺ ka thënë: <em>"Çdo bir i Ademit gabon, dhe më i miri i atyre që gabon është ai që pendon shumë."</em> (Tirmidhi 2499)<br><br>
+
+<strong>Katër Kushtet e Teubjes së Saktë:</strong><br>
+1. <strong>El-Ikla</strong> — Heqja dorë menjëherë nga gjynahu<br>
+2. <strong>En-Nedem</strong> — Keqardhja e sinqertë dhe pendimi i zemrës<br>
+3. <strong>El-Azm</strong> — Vendosmëria për të mos u kthyer kurrë<br>
+4. <strong>Redd el-Hukuk</strong> — Kthimi i të drejtave nëse gjynahu ka prekur të drejtat e njerëzve<br><br>
+
+Allahu thotë: <em>"Thuaj: O robërit e Mi që keni gabuar kundër vetëve tuaja, mos e humbni shpresën ndaj mëshirës së Allahut! Allahu i falë të gjitha gjynahet."</em> (Ez-Zumer 39:53)`,
+  refs:['Et-Tahrim 66:8','Ez-Zumer 39:53','En-Nisa 4:110','Tirmidhi 2499','Ibn Maxhe 4251'],
+  quranRef:{s:66,a:8},
+  hadithRef:{col:'tirmidhi',num:3537},
+  madhabs:{
+    h:'Hanefijtë thonë se teubja pranohet deri në momentin e vdekjes nëse është e sinqertë. Kthimi te gjynahu nuk e anullon teubjen e mëparshme.',
+    s:'Shafi\'ijtë e kushtëzojnë teubjen me kushtet e mësipërme. Nëse gjynahu ka lidhje me të drejta njerëzore, duhet kthyer ato ose kërkuar falje.',
+    m:'Malikitë theksojnë keqardhjen si kusht qendror. Imam Maliku ka thënë: "Pendimi i zemrës është guri themeltar."',
+    b:'Hanbelijtë thonë se teubja e sinqertë fshin gjynahet si të mos kishin ndodhur. Ibn Kajim el-Xhevzijeh ka shkruar librin e famshëm "Medarixh es-Salikin" për teubjen.'
+  }
+},
+/* ── MUZIKA ── */
+{
+  keys:['muzik','muzikë','këng','keng','instrument','piano','violin','gitarë','rap','pop','hiphop','audio','song'],
+  verdict:'makruh',
+  arabic:'وَمِنَ النَّاسِ مَن يَشْتَرِي لَهْوَ الْحَدِيثِ لِيُضِلَّ عَن سَبِيلِ اللَّهِ',
+  arabicTr:'Ka njerëz që blejnë argëtim të kotë për të devijuar nga rruga e Allahut.',
+  base:`Çështja e muzikës është një nga temat ku dijetarët kanë mendime të ndryshme, duke e bërë atë <strong>Çështje të Hapur</strong> me pozicione të ndryshme.<br><br>
+
+<strong>Konsensusi i dijetarëve:</strong><br>
+• <strong>Unanimisht Haram:</strong> Muzika me tekste obscene, që nxit degjenerimin moral, alkoholin ose imoralitetin<br>
+• <strong>Unanimisht Hallall:</strong> Nasheeidat islame pa instrumente muzikore (ose vetëm me def)<br>
+• <strong>Mendime të ndara:</strong> Muzika instrumentale neutrale pa tekst<br>
+• <strong>Lejuar me kushte:</strong> Muzika në dasma (def)<br><br>
+
+Profeti ﷺ ka thënë: <em>"Do të vijnë njerëz nga umeti im që do ta lejojnë zinënë, mëndafshin, alkoolin dhe instrumentet muzikore."</em> (Buhari — Muallak)`,
+  refs:['Luqman 31:6','Sahih Buhari 5590 (muallak)','El-A\'raf 7:33'],
+  quranRef:{s:31,a:6},
+  hadithRef:{col:'abudawud',num:3685},
+  madhabs:{
+    h:'Hanefijtë klasikë e konsiderojnë muzikën si Mekruh Tahrimen (shumë pranë haramit). Shumë dijetarë hanefi modern e dallojnë muzikën neutrale nga ajo e dëmshme.',
+    s:'Shafi\'ijtë klasikë, sidomos El-Ghazali, lejojnë instrumnetin def dhe refuzojnë instrumente të tjera. Dijetarë modern shafi\'i janë të ndarë.',
+    m:'Malikitë e Andaluzisë historikisht kishin qëndrim më lehtës ndaj muzikës. Ibn Rushd lejon muzikën e moderuar të caktuar.',
+    b:'Hanbeli klasikë janë striktë kundër muzikës. Mirëpo Ibn Tejmijje lejon nasheeidat pa instrumente dhe muzikën e dasëm me def.'
+  }
+},
+/* ── AGJËRIM ── */
+{
+  keys:['agjer','agjër','agjërim','ramazan','siyam','sehur','iftar','oruç','agjon','agjënon'],
+  verdict:'wajib',
+  arabic:'يَا أَيُّهَا الَّذِينَ آمَنُوا كُتِبَ عَلَيْكُمُ الصِّيَامُ كَمَا كُتِبَ عَلَى الَّذِينَ مِن قَبْلِكُمْ',
+  arabicTr:'O ju që besuat, agjërimi u është bërë detyrim, ashtu si ishte detyrë e atyre para jush.',
+  base:`Agjërimi i Ramazanit është shtylla e katërt e Islamit dhe <strong>Farz</strong> (detyrim) për çdo musliman të moshës madhore me mendje të shëndoshë dhe të aftë fizikisht.<br><br>
+
+<strong>Gjërat që e PRISHIN agjërimin:</strong><br>
+• Ngrënia dhe pirja me dashje dhe me kujtim<br>
+• Marrëdhëniet intime gjatë ditës<br>
+• Vjellja me qëllim<br>
+• Menstruacionet ose lehonia (femrat)<br><br>
+
+<strong>Gjërat që NUK e prishin agjërimin:</strong><br>
+• <strong>Ngrënia ose pirja me harresë</strong> — unanimisht nuk e prish<br>
+• Injeksionet jo-ushqyese (mjekësore)<br>
+• Pështyma e gëlltisur<br>
+• Erërat dhe aromat e pavullnetshme<br>
+• Largësia (me kushte)`,
+  refs:['El-Bekare 2:183','El-Bekare 2:187','Sahih Buhari 1933','Sahih Muslim 1155'],
+  quranRef:{s:2,a:183},
+  hadithRef:{col:'bukhari',num:1933},
+  madhabs:{
+    h:'Hanefijtë lejojnë hixhamën (kupëzimin) si të mos e prishë agjërimin. Injeksioni ushqyes e prish, kurse ai mjekësor nuk e prish.',
+    s:'Shafi\'ijtë e prishin agjërimin me çdo gjë që hyn në trupin nëpërmjet rrugës natyrale ose vrimave të trupit me qëllim.',
+    m:'Malikitë e prishin agjërimin me çfarëdo lëngu nëpërmjet ndonjë rruge të trupit me qëllim.',
+    b:'Hanbelijtë e konsiderojnë hixhamën si gjë që e prish agjërimin, bazuar në Hadith të caktuar.'
+  }
+},
+/* ── NAMAZ ── */
+{
+  keys:['namaz','salah','rekat','rekate','falje','fal namaz','fal namazi','xhuma','sabah','dreka','ikindia','aksham','jaci','kohë namazi','abdes','wudu'],
+  verdict:'wajib',
+  arabic:'أَقِمِ الصَّلَاةَ ۖ إِنَّ الصَّلَاةَ تَنْهَىٰ عَنِ الْفَحْشَاءِ وَالْمُنكَرِ',
+  arabicTr:'Fale namazin — me të vërtetë namazi ndalon nga të shëmtuarat dhe veprat e këqija.',
+  base:`Namazi është shtylla e dytë dhe qendrore e Islamit, shtylla që e dallon muslimanin nga jobesimtari.<br><br>
+
+<strong>Pesë Namazet Ditore dhe Rekatet:</strong><br>
+| Namazi | Farz | Sunnet |<br>
+|--------|------|--------|<br>
+| Sabahu (Fajr) | 2 | 2 para |<br>
+| Dreka (Dhuhr) | 4 | 4 para + 2 pas |<br>
+| Ikindia (Asr) | 4 | 4 para (Hanafi) |<br>
+| Akshami (Maghrib) | 3 | 2 pas |<br>
+| Jacia (Isha) | 4 | 4 para + 2 pas + 3 vitër |<br><br>
+
+Profeti ﷺ ka thënë: <em>"Namazi është shtyllë e fesë. Kush e kryen, ka ngritur fenë. Kush e braktis, ka rrënuar fenë."</em>`,
+  refs:['El-Bekare 2:43','En-Nisa 4:103','El-Ankebut 29:45','Sahih Buhari 520','Sahih Muslim 682'],
+  quranRef:{s:29,a:45},
+  hadithRef:{col:'bukhari',num:520},
+  madhabs:{
+    h:'Hanefijtë e konsiderojnë Vitrin Vaxhib (detyrim). Mënyra e faljes ndryshon paksa — ngritja e duarve vetëm në tekbirin e parë.',
+    s:'Shafi\'ijtë lexojnë Bismilah me zë në namazet e zëshme. Falin Kunut në namazin e Sabahut gjithmonë.',
+    m:'Malikitë nuk ngrenë duart pos në tekbirin e parë. Nuk lexojnë Bismilah me zë dhe nuk falin Kunut në Sabah zakonisht.',
+    b:'Hanbelijtë e njohin Vitrin si Vaxhib. Ngrenë duart në disa vende gjatë namazit sipas sunnetit të Profetit ﷺ.'
+  }
+},
+/* ── ZEKAT ── */
+{
+  keys:['zekat','zakat','nisab','zeqat','lëmoshë detyruese','detyrë','sadaka e detyrueshme'],
+  verdict:'wajib',
+  arabic:'وَأَقِيمُوا الصَّلَاةَ وَآتُوا الزَّكَاةَ وَارْكَعُوا مَعَ الرَّاكِعِينَ',
+  arabicTr:'Kryejeni namazin, jepni zekatin dhe bini në rukú bashkë me ata që bien.',
+  base:`Zekati është shtylla e tretë e Islamit dhe <strong>Farz</strong> absolut për çdo musliman që ka arritur Nisabin për një vit hënor.<br><br>
+
+<strong>Nisabi dhe Norma e Zekatit:</strong><br>
+• <strong>Ari:</strong> 85 gramë ari (≈ 7.5 tola)<br>
+• <strong>Argjendi:</strong> 595 gramë argjend<br>
+• <strong>Norma:</strong> 2.5% e vlerës totale<br>
+• <strong>Kushti:</strong> Pasuria të ketë qenë mbi Nisab për 1 vit hënor (Haul)<br><br>
+
+<strong>8 Kategoritë e Përfituesve (El-Muslimin):</strong><br>
+1. Të varfrit (Fuqara) · 2. Nevojtarët (Mesakin) · 3. Mbledhësit e zekatit · 4. Ata që duhen tërhequr drejt Islamit · 5. Skllavët për liri · 6. Borxhlinjt · 7. Rruga e Allahut · 8. Udhëtarët e nevojshëm`,
+  refs:['Et-Teubeh 9:60','El-Bekare 2:177','Sahih Buhari 1395','Sahih Muslim 982'],
+  quranRef:{s:9,a:60},
+  hadithRef:{col:'bukhari',num:1395},
+  madhabs:{
+    h:'Hanefijtë e llogarisin Nisabin bazuar në vlerën e argjendit (595g), gjë që e ul pragun — kështu më shumë njerëz detyrohen.',
+    s:'Shafi\'ijtë bazojnë Nisabin në ari (85g). Zekati i bujqësisë ka rregulla specifike (Ushr).',
+    m:'Malikitë i japin rëndësi Nisabit të arit. Lejojnë Nisabin e argjendit kur pasuria është e kombinuar.',
+    b:'Hanbelijtë e llogarisin Nisabin si vlerën e arit. Trajtojnë detajisht çështjen e zekatit mbi aksionet dhe investimet moderne.'
+  }
+},
+/* ── PRINDËRIT ── */
+{
+  keys:['prindër','prinder','nënë','nana','atë','baba','familje','birësi','respekt prinder','detyrim prinder'],
+  verdict:'wajib',
+  arabic:'وَقَضَىٰ رَبُّكَ أَلَّا تَعْبُدُوا إِلَّا إِيَّاهُ وَبِالْوَالِدَيْنِ إِحْسَانًا',
+  arabicTr:'Zoti yt ka urdhëruar të mos adhuroni tjetërkënd veç Tij, dhe të bëni mirë prindërve.',
+  base:`Respekti ndaj prindërve vjen <strong>menjëherë pas adhurimit të Allahut</strong> — ky rend në Kuranin Fisnik tregon rëndësinë e jashtëzakonshme të kësaj detyre.<br><br>
+
+Profeti ﷺ u pyet: <em>"Cila vepër është më e dashur tek Allahu?"</em> Tha: <em>"Namazi në kohën e tij."</em> U pyet: <em>"Pastaj cila?"</em> Tha: <em>"Bamirësia ndaj prindërve."</em> U pyet: <em>"Pastaj cila?"</em> Tha: <em>"Xhihadi në rrugën e Allahut."</em> (Buhari 527)<br><br>
+
+<strong>Detyrimet ndaj Prindërve:</strong><br>
+• Respekti me fjalë dhe vepra<br>
+• Kujdesi material kur kanë nevojë<br>
+• Lutja e çdo ditës: <span style="font-family:var(--fa);font-size:1rem;color:var(--g2)">رَّبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا</span><br>
+• Zbatimi i urdhrave të tyre (sa të mos jenë kundër Islamit)`,
+  refs:['El-Isra 17:23-24','El-Ahkaf 46:15','Sahih Buhari 527','Sahih Muslim 2549'],
+  quranRef:{s:17,a:23},
+  hadithRef:{col:'bukhari',num:527},
+  madhabs:{
+    h:'Hanefijtë e bëjnë Farz furnizimin material të prindërve të varfër.',
+    s:'Shafi\'ijtë e kushtëzojnë detyrimin material me kushte ekonomike specifike të fëmijës.',
+    m:'Malikitë e zgjerojnë detyrimin e kujdesit tek gjyshërit gjithashtu.',
+    b:'Hanbelijtë e trajtojnë gjerësisht çështjen e bindjes ndaj prindërve jomusliman brenda kufijve islamë.'
+  }
+},
+/* ── TATUAZHI ── */
+{
+  keys:['tatuazh','tatuz','tattoo','tatuazhit','bojë lëkur','piktur trup','ngjyr trup'],
+  verdict:'haram',
+  arabic:null,arabicTr:null,
+  base:`Tatuazhi është <strong>Haram</strong> sipas konsensusit të katër medhhebeve, bazuar në hadithet e sakta.<br><br>
+
+Profeti ﷺ ka thënë: <em>"I ka mallkuar Allahu atë që bën tatuazhe dhe atë të cilit i bëhen."</em> (Buhari 5931, Muslim 2125)<br><br>
+
+<strong>Arsyet e Ndalimit:</strong><br>
+• Ndryshimi i krijimit të Allahut ﷻ<br>
+• Dëmtimi i qëllimshëm i trupit<br>
+• Ndalim shprehimor në hadithet e sakta<br><br>
+
+<strong>Nëse dikush ka bërë tatuazh</strong> para Islamit ose para se të dinte se është haram — është i falur dhe nuk ka detyrim ta heqë nëse operacioni është i rrezikshëm ose shumë i dhimbshëm.`,
+  refs:['Sahih Buhari 5931','Sahih Muslim 2125','En-Nisa 4:119'],
+  quranRef:{s:4,a:119},
+  hadithRef:{col:'bukhari',num:5931},
+  madhabs:{
+    h:'Hanefijtë e ndalojnë tatuazhin kategorikisht si Haram.',
+    s:'Shafi\'ijtë pajtohen me ndalimin. Imam Neveviu e konfirmon hadithin si argument kryesor.',
+    m:'Malikitë e ndalojnë duke u bazuar në të njëjtat hadithe autentike.',
+    b:'Hanbelijtë e ndalojnë. Ibn Kudame e konsideron si ndryshim të pakërkuar të krijimit të Allahut.'
+  }
+},
+/* ── SHTYLLAT ── */
+{
+  keys:['shtylla','shtyllat','5 shtylla','pesë shtylla','shtyllat e islam','baza e islam'],
+  verdict:'wajib',
+  arabic:'بُنِيَ الْإِسْلَامُ عَلَى خَمْسٍ',
+  arabicTr:'Islami është ndërtuar mbi pesë (shtylla).',
+  base:`<strong>Pesë Shtyllat e Islamit</strong> janë themeli mbi të cilin ngrihet e gjithë feja islame:<br><br>
+
+<strong>🌙 1. Shahada — Dëshmia</strong><br>
+<span style="font-family:var(--fa);font-size:1rem;color:var(--g2)">أَشْهَدُ أَن لَّا إِلَٰهَ إِلَّا اللَّهُ وَأَشْهَدُ أَنَّ مُحَمَّدًا رَّسُولُ اللَّهِ</span><br>
+Dëshmia se nuk ka zot tjetër veç Allahut dhe Muhammedi është i Dërguar i Tij<br><br>
+
+<strong>🕌 2. Salah — Namazi</strong><br>
+Pesë herë në ditë — detyrë, lidhja e drejtpërdrejtë me Allahun<br><br>
+
+<strong>💰 3. Zekat — Lëmosha e Detyrueshme</strong><br>
+2.5% e pasurisë mbi nisabin, çdo vit hënor<br><br>
+
+<strong>🌙 4. Sawm — Agjërimi i Ramazanit</strong><br>
+Agjërim i detyrueshëm gjatë muajit të shenjtë<br><br>
+
+<strong>🕋 5. Haxhxh — Pelegrinazhi</strong><br>
+Detyrë një herë në jetë për çdo musliman me mundësi`,
+  refs:['Sahih Buhari 8','Sahih Muslim 16'],
+  quranRef:{s:2,a:177},
+  hadithRef:{col:'bukhari',num:8},
+  madhabs:null
+},
+/* ── HIXHAB ── */
+{
+  keys:['hixhab','hijab','mbulim','vello','niqab','shami','mbulese','veshje femër','veshje grua','mbuloj','burqa'],
+  verdict:'wajib',
+  arabic:'وَقُل لِّلْمُؤْمِنَاتِ يَغْضُضْنَ مِنْ أَبْصَارِهِنَّ وَيَحْفَظْنَ فُرُوجَهُنَّ',
+  arabicTr:'Dhe thuaj besimtareve të ulin shikimet e tyre dhe të ruajnë nderin e tyre.',
+  base:`Hixhabi (mbulimi i gruas muslimane) është <strong>Farz</strong> sipas konsensusit të katër medhhebeve. Dallimet janë vetëm në detaje specifike, jo në obligimin themelor.<br><br>
+
+<strong>Kushtet e Hixhabit të Saktë (sipas shumicës):</strong><br>
+• Të mbulojë të gjithë trupin pos fytyrës dhe duarve<br>
+• Të mos jetë transparent<br>
+• Të mos jetë i ngushtë apo i ngushtë<br>
+• Të mos jetë parfum i jashtëm<br>
+• Të mos i ngjajë veshjes së meshkujve<br>
+• Të mos jetë libas esh-shuhra (i famshëm për krenar)`,
+  refs:['El-Ahzab 33:59','En-Nur 24:30-31','Sahih Buhari 5536','Abu Daud 4116'],
+  quranRef:{s:33,a:59},
+  hadithRef:{col:'abudawud',num:4116},
+  madhabs:{
+    h:'Hanefijtë thonë fytyra dhe duart janë jo-avret dhe nuk duhet mbuluar domosdoshmërisht, mirëpo preferohet mbulimi kur ka fitneh.',
+    s:'Shafi\'ijtë e konsiderojnë gjithë trupin e gruas si avret përpara të huajve, duke përfshirë fytyrën sipas mendimit të fortë.',
+    m:'Malikitë e konsiderojnë fytyrën si jo-avret por rekomandojnë mbulimin si Mustehab kur ka nevojë.',
+    b:'Hanbelijtë: mendimi i fortë është se fytyra është avret dhe duhet mbuluar — mbështetur nga Ibn Tejmijje.'
+  }
+},
+/* ── KRIPTOMONEDHË ── */
+{
+  keys:['kript','kripto','bitcoin','btc','ethereum','eth','nft','blockchain','token','digjital','invest digjit'],
+  verdict:'open',
+  arabic:null,arabicTr:null,
+  base:`Kriptomonedhat janë çështje moderne ku dijetarët bashkëkohorë janë të ndarë dhe nuk ka konsensus të plotë.<br><br>
+
+<strong>Ata që LEJOJNË (me kushte):</strong><br>
+• Nëse kriptomonedha ka vlerë reale dhe përdoret si mjet shkëmbimi<br>
+• Nëse tregtia është e lirë nga spekulim i tepruar dhe manipulim<br>
+• Akademia AAOIFI dhe disa dijetarë të njohur e lejojnë me kushte<br><br>
+
+<strong>Ata që NDALOJNË:</strong><br>
+• Spekulimi i tepërt (Gharar) dhe luhatja extreme e çmimit<br>
+• Rreziku i lojës së fatit (Maysir) tek day trading<br>
+• Akademia Al-Azhar ka rezerva të mëdha<br><br>
+
+<strong>Konkluzion Praktik:</strong> Investimi i kujdesshëm pa spekulim të tepruar mund të jetë i lejuar. Day trading spekuluese është problematike.`,
+  refs:['El-Bekare 2:275','El-Maida 5:90','Mexhma El-Fikh El-Islami 2021'],
+  quranRef:{s:2,a:279},
+  hadithRef:{col:'muslim',num:1532},
+  madhabs:{
+    h:'Shumë dijetarë hanefi bashkëkohorë e lejojnë blerjen si mall, jo domosdoshmërisht si monedhë.',
+    s:'Mendimi shafi\'i është i ndarë. Disa e lejojnë me kushte, disa janë rezervuar.',
+    m:'Dijetarët malikë janë kujdesshëm. Disa e krahasojnë me transaksionet me pasiguri (Gharar).',
+    b:'Dijetarët hanbeli janë të ndarë. Gjeneratat e reja janë pak më lehtës por me kushte strikt.'
+  }
+},
+/* ── DIVORCIT ── */
+{
+  keys:['divorc','talak','ndarje','ndare','grua','burr','martese dështoi','martes','kurorë','nikah'],
+  verdict:'open',
+  arabic:'الطَّلَاقُ مَرَّتَانِ ۖ فَإِمْسَاكٌ بِمَعْرُوفٍ أَوْ تَسْرِيحٌ بِإِحْسَانٍ',
+  arabicTr:'Divorci (i revokueshëm) është dy herë: pastaj ose mbajtja me mirësi ose largimi me mirësi.',
+  base:`Divorci (Talaku) lejohet në Islam si zgjidhje e fundit, por konsiderohet si gjëja më e urryera nga hallallet: <em>"Gjëja më e urryera e lejuar tek Allahu është divorci."</em> (Abu Daud 2178)<br><br>
+
+<strong>Llojet e Talakut:</strong><br>
+• <strong>Talak Raja'i (i revokueshëm)</strong> — 1 ose 2 talak, mund të kthehet brenda iddës<br>
+• <strong>Talak Bain Bainunet Sugra</strong> — kthim vetëm me nikah të ri<br>
+• <strong>Talak Bain Bainunet Kubra</strong> — pas 3 talakeve, nuk mund të kthehet pa u martuar me tjetrin<br><br>
+
+<strong>Idda (Periudha e Pritjes):</strong><br>
+• Gruaja e divorcuar pret 3 cikle menstruale para martesës me tjetrin<br>
+• Gruaja shtatzënë pret deri pas lindjes`,
+  refs:['El-Bekare 2:229','Et-Talak 65:1','Abu Daud 2178','Sahih Buhari 5251'],
+  quranRef:{s:2,a:229},
+  hadithRef:{col:'abudawud',num:2178},
+  madhabs:{
+    h:'Hanefijtë e njohin talakun e trishtë (3 herë njëkohësisht) si efektiv megjithëse bida\'ah.',
+    s:'Shafi\'ijtë pajtohen me hanefijtë në njohjen e talakut të trishtë.',
+    m:'Malikitë e njohin talakun e trishtë si efektiv dhe bida.',
+    b:'Hanbelijtë: Ibn Tejmijje ka mendimin e fortë se 3 talaket e njëkohshme numërohen si 1 talak — mendim me bazë të fortë historike.'
+  }
+},
+/* ── ESMAUL HUSNA ── */
+{
+  keys:['esmaul husna','emra bukur','99 emra','emrat e allahut','asmaul husna'],
+  verdict:'wajib',
+  arabic:'وَلِلَّهِ الْأَسْمَاءُ الْحُسْنَىٰ فَادْعُوهُ بِهَا',
+  arabicTr:'Allahut i takojnë emrat më të bukur, prandaj thirrjeni me to.',
+  base:`Esmaul Husna janë 99 (ose më shumë) emrat e bukur dhe cilësitë e Allahut ﷻ. Profeti ﷺ ka thënë: <em>"Allahu ka 99 emra — 100 pa 1. Kush i numëron ato (i mëson, i kupton dhe vepron sipas tyre), hyn në Xhenet."</em> (Buhari 2736)<br><br>
+
+<strong>Disa nga Emrat kryesorë:</strong><br>
+• <span style="font-family:var(--fa);font-size:1rem;color:var(--g2)">الرَّحْمَٰنُ</span> — Ar-Rahman (Mëshiruesi i Madh)<br>
+• <span style="font-family:var(--fa);font-size:1rem;color:var(--g2)">الرَّحِيمُ</span> — Ar-Rahim (Mëshiruesi)<br>
+• <span style="font-family:var(--fa);font-size:1rem;color:var(--g2)">الْمَلِكُ</span> — El-Melik (Mbreti)<br>
+• <span style="font-family:var(--fa);font-size:1rem;color:var(--g2)">الْقُدُّوسُ</span> — El-Kuddus (I Shenjti)<br>
+• <span style="font-family:var(--fa);font-size:1rem;color:var(--g2)">الْغَفُورُ</span> — El-Gafur (Falësi i Madh)<br>
+• <span style="font-family:var(--fa);font-size:1rem;color:var(--g2)">الْحَكِيمُ</span> — El-Hakim (I Gjithëdijshmi)`,
+  refs:['El-A\'raf 7:180','El-Isra 17:110','Sahih Buhari 2736','Sahih Muslim 2677'],
+  quranRef:{s:7,a:180},
+  hadithRef:{col:'bukhari',num:2736},
+  madhabs:null
+}
+];
+
+/* ══ GENERIC REASONING ENGINE ══ */
+function smartAnswer(q) {
+  const l = q.toLowerCase().normalize('NFC');
+  // Find best KB match
+  let best=null, bestScore=0;
+  for (const e of KB) {
+    let score=0;
+    for (const k of e.keys) {
+      if (l.includes(k.toLowerCase())) score += k.length > 5 ? 15 : 8;
+    }
+    // Partial word matches
+    for (const k of e.keys) {
+      for (const w of k.split(' ')) {
+        if (w.length > 3 && l.includes(w.toLowerCase())) score += 4;
+      }
+    }
+    if (score > bestScore) { bestScore = score; best = e; }
+  }
+  if (bestScore >= 4) return best;
+  return buildGeneric(q, l);
+}
+
+function buildGeneric(q, l) {
+  // Detect intent and build intelligent generic response
+  const isHH = /hallall|haram|lejohet|ndaluar|gjynah|a mund|a lejohet|a prishet|a është haram|a është hallall/.test(l);
+  const isHow = /si bëhet|si falet|si llogar|si veprohet|si bëhemi|si mund/.test(l);
+  const isWhat = /çfarë është|cila është|çfarë thotë|çfare thote|çfare ndodh|kush është/.test(l);
+  const isWork = /punë|profesion|zanat|detyrë|punëtor|biznes|kompani|shitje|blerje/.test(l);
+  const isDua = /dua|lutje|lutem|dhikr|zikr|istighfar|tesbih|salavat/.test(l);
+  const isQuran = /kuran|sure|sure|ajeti|varg|ajet/.test(l);
+  const isHadith = /hadith|profeti|sunnet|buhari|muslim|tirmidhi/.test(l);
+
+  let base, arabic=null, arabicTr=null, refs=['El-Bekare 2:286','El-Haxhh 22:78'];
+  const qRef={s:2,a:286}, hRef={col:'bukhari',num:1};
+
+  if (isWork) {
+    arabic='يَا أَيُّهَا الَّذِينَ آمَنُوا لَا تَأْكُلُوا أَمْوَالَكُم بَيْنَكُم بِالْبَاطِلِ';
+    arabicTr='O ju besimtarë! Mos e hani pasurinë e njëri-tjetrit me rrugë të padrejta.';
+    base=`Islami e vlerëson punën e ndershme shumë lart. Kriteret e hallallit në punë:<br><br>
+<strong>Çdo punë apo profesion është HALLALL nëse:</strong><br>
+✅ Nuk prodhon ose shet diçka të haramit<br>
+✅ Nuk ka mashtrим, dështi ose padrejtësi<br>
+✅ Nuk shkakton dëm shoqëror<br>
+✅ Nuk ndalohet shprehimisht nga Kurani ose Sunneti<br><br>
+Profeti ﷺ ka thënë: <em>"Askush nuk ka ngrënë ushqim më të mirë se ai i fituar me dorën e vet."</em> (Buhari 2072)<br><br>
+Specifikoni profesionin konkret dhe do t\'ju jap gjykim të saktë!`;
+    refs=['En-Nisa 4:29','El-Xhuma 62:10','Sahih Buhari 2072'];
+  } else if (isDua) {
+    arabic='وَإِذَا سَأَلَكَ عِبَادِي عَنِّي فَإِنِّي قَرِيبٌ ۖ أُجِيبُ دَعْوَةَ الدَّاعِ إِذَا دَعَانِ';
+    arabicTr='Kur të pyesin robërit e Mi për Mua, Unë jam i afërt — i përgjigjem lutjes së atij që më lutet.';
+    base=`Lutja (Dua) është adhurimi kryesor — Profeti ﷺ ka thënë: <em>"Dua është ibadeti kryesor."</em><br><br>
+<strong>Kushtet e Pranimit të Duas:</strong><br>
+• Sinqeriteti i zemrës (Ikhlas)<br>
+• Pasja e Allahut si Mëshirues dhe Dëgjues<br>
+• Dua me gojë dhe zemër, jo vetëm me gjuhë<br>
+• Ushqimi hallall<br>
+• Mos u nxitoni — Allahu di kohën e duhur<br><br>
+Disa Dua të njohura:<br>
+<span style="font-family:var(--fa);color:var(--g2)">رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً</span>`;
+    refs=['El-Bekare 2:186','Ghafir 40:60','Tirmidhi 2969'];
+  } else if (isQuran) {
+    arabic='إِنَّ هَٰذَا الْقُرْآنَ يَهْدِي لِلَّتِي هِيَ أَقْوَمُ';
+    arabicTr='Me të vërtetë, ky Kuran udhëzon drejt asaj që është më e drejta.';
+    base=`Kurani Fisnik është fjala e Allahut dhe udhëzimi i plotë për njerëzimin. Ka <strong>114 sure</strong> dhe <strong>6236 ajete</strong>.<br><br>
+<strong>Suret kryesore dhe rëndësia e tyre:</strong><br>
+• <strong>El-Fatiha</strong> — Nëna e Kuranit, 7 ajete<br>
+• <strong>El-Bekare</strong> — Surja më e gjatë, 286 ajete<br>
+• <strong>Ajetul-Kursi (2:255)</strong> — Mbrojtja më e madhe<br>
+• <strong>El-Ikhlas (112)</strong> — Barasvlerëse me 1/3 e Kuranit<br>
+• <strong>El-Felak dhe En-Nas</strong> — Suret e mbrojtjes<br><br>
+Cila sure ose ajet dëshironi të mësoni?`;
+    refs=['El-Isra 17:9','El-Bakara 2:2','Sahih Muslim 798'];
+  } else {
+    base=`Pyetja juaj shtron çështje të rëndësishme islame.<br><br>
+<strong>Parimet Bazë të Fikhut Islamik (Kavaidul Fikh):</strong><br><br>
+⚖️ <strong>"El-umuru bi-maqasidiha"</strong> — Veprat gjykohen sipas qëllimeve (Buhari 1)<br><br>
+⚖️ <strong>"El-asl fil-ashya el-ibaha"</strong> — Rregulli bazë është se gjërat janë të lejuara derisa të vërtetohet ndalimi<br><br>
+⚖️ <strong>"La darar wa la dirar"</strong> — Nuk ka dëm dhe nuk shkaktohet dëm (Ibn Maxhe 2340)<br><br>
+⚖️ <strong>"Ed-daruratu tubihul mahzurat"</strong> — Domosdoshmëria e lejon të ndaluarën<br><br>
+⚖️ <strong>"El-mashaqqa takhib et-tejsir"</strong> — Vështirësia sjell lehtësi<br><br>
+Specifikoni pyetjen tuaj me detaje dhe do t\'ju jap përgjigje me referenca të sakta nga Kurani dhe Hadithi! 🌙`;
+    arabic='وَمَا جَعَلَ عَلَيْكُمْ فِي الدِّينِ مِنْ حَرَجٍ';
+    arabicTr='Allahu nuk ka vënë mbi ju asnjë vështirësi në fe.';
+    refs=['El-Haxhh 22:78','El-Bekare 2:286','Ibn Maxhe 2340'];
+  }
+  return { arabic, arabicTr, base, refs, verdict:null, madhabs:null, quranRef:qRef, hadithRef:hRef };
+}
+
+/* ══ BUILD HTML RESPONSE ══ */
+function buildHTML(entry, q) {
+  const l = q.toLowerCase();
+  const showMadhabs = entry.madhabs && (
+    /medhheb|hanafi|shafi|maliki|hanbeli|mendim|mendime|krahasim|dallim/.test(l) || true
+  );
+  let h = '';
+  // Verdict
+  const vm = {halal:'vhalal',haram:'vharam',makruh:'vmakruh',wajib:'vwajib',mubah:'vmubah',open:'vopen'};
+  const vi = {halal:'✅ HALLALL',haram:'🚫 HARAM',makruh:'⚠️ MEKRUH',wajib:'🟢 VAXHIB',mubah:'🔵 MUBAH',open:'⚖️ ÇËSHTJE E HAPUR'};
+  if (entry.verdict) h += `<div class="verdict ${vm[entry.verdict]||'vopen'}">${vi[entry.verdict]||'⚖️'}</div>`;
+  // Main text
+  h += `<div style="white-space:pre-line;line-height:1.84">${entry.base}</div>`;
+  // Arabic
+  if (entry.arabic) {
+    h += `<span class="aq">${entry.arabic}</span><span class="atr">"${entry.arabicTr}"</span>`;
+  }
+  // References
+  if (entry.refs?.length) {
+    h += `<div class="sect"><div class="stitle stg">📚 Referencat</div><div class="refs">${entry.refs.map(r=>`<span class="ref">📌 ${r}</span>`).join('')}</div></div>`;
+  }
+  // Madhabs
+  if (showMadhabs && entry.madhabs) {
+    h += `<div class="sect"><div class="stitle stg">🕌 Mendimet sipas Medhhebeve</div><div class="madhabs">
+      <div class="md"><div class="mh h">🔵 Hanafi</div><div class="mt">${entry.madhabs.h}</div></div>
+      <div class="md"><div class="mh s">🟢 Shafi'i</div><div class="mt">${entry.madhabs.s}</div></div>
+      <div class="md"><div class="mh m">🟡 Maliki</div><div class="mt">${entry.madhabs.m}</div></div>
+      <div class="md"><div class="mh b">🔴 Hanbeli</div><div class="mt">${entry.madhabs.b}</div></div>
+    </div></div>`;
+  }
+  // Disclaimer
+  h += `<div class="disclaim">⚠️ Ky informacion është edukativ islamik. Për çështje personale me peshë, konsultohuni me dijetar të kualifikuar.</div>`;
+  return h;
+}
+
+/* ══ LIVE QURAN API ══ */
+async function fetchQuranVerse(s, a) {
+  try {
+    const [ar, tr] = await Promise.all([
+      fetch(`${QURAN_API}/ayah/${s}:${a}/quran-simple`, {signal:AbortSignal.timeout(7000)}).then(r=>r.json()),
+      fetch(`${QURAN_API}/ayah/${s}:${a}/sq.ahmeti`, {signal:AbortSignal.timeout(7000)}).then(r=>r.json())
+    ]);
+    if (ar.code!==200) return null;
+    return { arabic:ar.data.text, tr:tr.data.text, surah:ar.data.surah.englishName, surahAr:ar.data.surah.name, ayah:ar.data.numberInSurah, surahNum:s };
+  } catch(e) { return null; }
+}
+
+/* ══ LIVE HADITH API ══ */
+async function fetchHadith(col, num) {
+  const m={'bukhari':'eng-bukhari','muslim':'eng-muslim','abudawud':'eng-abudawud','tirmidhi':'eng-tirmidhi','ibnmajah':'eng-ibnmajah'};
+  try {
+    const res = await fetch(`${HADITH_CDN}/${m[col]||'eng-bukhari'}/${num}.json`, {signal:AbortSignal.timeout(7000)});
+    if (!res.ok) return null;
+    const d = await res.json();
+    const had = d.hadiths?.[0];
+    if (!had) return null;
+    return { text:had.text, collection:d.metadata?.name||col, num };
+  } catch(e) { return null; }
+}
+
+/* ══ ENRICH WITH LIVE APIS ══ */
+async function enrichLive(bubId, entry) {
+  const bub = document.getElementById('bub-'+bubId);
+  if (!bub || !entry) return;
+  const parts = [];
+  if (entry.quranRef) {
+    const v = await fetchQuranVerse(entry.quranRef.s, entry.quranRef.a);
+    if (v) parts.push(`<div class="qblock"><div class="qlabel">📖 AlQuran.cloud — Varg i Gjallë</div>
+      <span class="qar">${v.arabic}</span>
+      <div class="qtr">${v.tr}</div>
+      <div class="qmeta">Sure ${v.surahNum}: ${v.surah} · Ajeti ${v.ayah} · api.alquran.cloud</div>
+    </div>`);
+  }
+  if (entry.hadithRef) {
+    const h = await fetchHadith(entry.hadithRef.col, entry.hadithRef.num);
+    if (h) parts.push(`<div class="hblock"><div class="hlabel">📜 Hadith API — I Gjallë</div>
+      <div class="htxt">"${h.text}"</div>
+      <div class="hmeta">${h.collection} · Nr. ${h.num} · cdn.jsdelivr.net/hadith-api</div>
+    </div>`);
+  }
+  if (parts.length) {
+    const d = document.createElement('div');
+    d.innerHTML = parts.join('');
+    d.style.animation = 'min .4s ease';
+    const disc = bub.querySelector('.disclaim');
+    if (disc) bub.insertBefore(d, disc); else bub.appendChild(d);
+    scrollBot();
+  }
+}
+
+/* ══ DOM HELPERS ══ */
+function getWrap(){let w=document.querySelector('#chatMsgs .mwrap');if(!w){w=document.createElement('div');w.className='mwrap';document.getElementById('chatMsgs').appendChild(w);}return w;}
+function scrollBot(){const c=document.getElementById('chat');c.scrollTop=c.scrollHeight;}
+function escH(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function removeEl(id){const e=document.getElementById(id);if(e)e.remove();}
+
+function addUserBub(text) {
+  const w=getWrap(),d=document.createElement('div');
+  d.className='msg user';
+  d.innerHTML=`<div class="av">👤</div><div class="mb"><div class="mn">Ju</div><div class="bub">${escH(text)}</div></div>`;
+  w.appendChild(d);scrollBot();
+}
+
+function addThink() {
+  const id='tk-'+(tc++),w=getWrap(),d=document.createElement('div');
+  d.className='msg ai';d.id=id;
+  d.innerHTML=`<div class="av">⚖️</div><div class="mb"><div class="mn">Eidro Mufti AI <span class="mv">✓</span></div><div class="thinking"><div class="tdots"><div class="tdot"></div><div class="tdot"></div><div class="tdot"></div></div><span class="tlab">Duke analizuar burimet islame...</span></div></div>`;
+  w.appendChild(d);scrollBot();return id;
+}
+
+function addAIBub(html, entry) {
+  const id='ai-'+(mc++),w=getWrap(),d=document.createElement('div');
+  d.className='msg ai';d.id=id;
+  d.innerHTML=`<div class="av">⚖️</div><div class="mb">
+    <div class="mn">Eidro Mufti AI <span class="mv">✓</span></div>
+    <div class="bub" id="bub-${id}"><div id="txt-${id}" style="opacity:0"></div></div>
+    <div class="macts" id="acts-${id}" style="opacity:0">
+      <button class="ma" onclick="likeIt(this)">👍 Dobishëm</button>
+      <button class="ma" onclick="dislikeIt(this)">👎 Jo i saktë</button>
+      <button class="ma" onclick="copyBub('bub-${id}')">📋 Kopjo</button>
+      <button class="ma" onclick="speakBub('bub-${id}')">🔊 Dëgjo</button>
+    </div>
+  </div>`;
+  w.appendChild(d);scrollBot();
+  streamText(document.getElementById('txt-'+id), html, ()=>{
+    const a=document.getElementById('acts-'+id);if(a)a.style.opacity='1';scrollBot();
+    // After streaming, enrich with live APIs
+    enrichLive(id, entry);
+  });
+  return id;
+}
+
+function streamText(el, html, done) {
+  el.style.opacity='1';
+  const plain=html.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+  const chars=plain.split('');let i=0;
+  function tick(){
+    if(i>=chars.length){el.innerHTML=html;if(done)done();return;}
+    const b=Math.min(7,chars.length-i);for(let j=0;j<b;j++)i++;
+    el.textContent=chars.slice(0,i).join('');scrollBot();
+    setTimeout(tick,8);
+  }
+  tick();
+}
+
+/* ══ SEND ══ */
+async function sendMsg() {
+  const inp=document.getElementById('uInput');
+  const text=inp.value.trim();
+  if(!text||busy)return;
+  inp.value='';inp.style.height='auto';
+  document.getElementById('welcome').style.display='none';
+  addUserBub(text);
+  msgs.push({r:'user',c:text});
+  addHistItem(text.substring(0,36)+(text.length>36?'...':''));
+  busy=true;setUIBusy(true);
+  const tid=addThink();
+  // Simulate thinking time (500-1200ms) then generate response
+  const delay=600+Math.random()*700;
+  await new Promise(r=>setTimeout(r,delay));
+  removeEl(tid);
+  const entry=smartAnswer(text);
+  const html=buildHTML(entry,text);
+  addAIBub(html,entry);
+  msgs.push({r:'ai',c:entry.base});
+  busy=false;setUIBusy(false);
+}
+
+function ask(t){document.getElementById('uInput').value=t;sendMsg();}
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
+function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,132)+'px';}
+
+/* ══ ACTIONS ══ */
+function likeIt(btn){btn.classList.toggle('liked');btn.closest('.macts').querySelectorAll('.ma')[1].classList.remove('disliked');showToast('✅ Faleminderit!');}
+function dislikeIt(btn){btn.classList.toggle('disliked');btn.closest('.macts').querySelectorAll('.ma')[0].classList.remove('liked');showToast('📝 Faleminderit! Do të mësohem.');}
+function copyBub(id){const e=document.getElementById(id);if(e){navigator.clipboard.writeText(e.innerText||e.textContent);showToast('📋 Teksti u kopjua!');}}
+function speakBub(id){const e=document.getElementById(id);if(e&&'speechSynthesis'in window){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(e.innerText||e.textContent);u.lang='sq';u.rate=.88;window.speechSynthesis.speak(u);showToast('🔊 Duke lexuar...');}}
+function speakLast(){const es=document.querySelectorAll('.msg.ai .bub');if(es.length)speakBub(es[es.length-1].id);else showToast('ℹ️ Nuk ka asnjë përgjigje akoma.');}
+function exportChat(){
+  if(!msgs.length){showToast('ℹ️ Nuk ka bisedë.');return;}
+  let out='════════════════════════════════\n   EIDRO MUFTI AI — BISEDË\n   Created by Erind Roci © 2026\n   AlQuran.cloud + Hadith CDN\n════════════════════════════════\n\n';
+  msgs.forEach(m=>{out+=(m.r==='user'?'👤 Pyetja:\n':'⚖️ Eidro Mufti AI:\n')+m.c.replace(/<[^>]+>/g,'')+'\n\n'+'─'.repeat(40)+'\n\n';});
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([out],{type:'text/plain;charset=utf-8'}));a.download='eidro-mufti-'+Date.now()+'.txt';a.click();
+  showToast('📤 Biseda u eksportua!');
+}
+
+/* ══ UI ══ */
+function newChat(){msgs=[];document.getElementById('chatMsgs').innerHTML='';document.getElementById('welcome').style.display='';}
+function setUIBusy(b){document.getElementById('sendBtn').disabled=b;document.getElementById('livdot').className=b?'livdot busy':'livdot';document.getElementById('livlbl').textContent=b?'Duke gjeneruar...':'Eidro Mufti AI · Online';document.getElementById('sdot').className=b?'sdot busy':'sdot';document.getElementById('slbl').textContent=b?'Duke procesuar...':'Live · Falas';}
+function toggleTheme(){const h=document.documentElement,l=h.dataset.theme==='light';h.dataset.theme=l?'dark':'light';document.getElementById('thic').textContent=l?'🌙':'☀️';document.getElementById('thlbl').textContent=l?'Natë':'Ditë';}
+function navSel(el){document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));el.classList.add('on');}
+function tabSel(b){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));b.classList.add('on');}
+function filterHist(v){document.querySelectorAll('.hit').forEach(h=>{h.style.display=h.textContent.toLowerCase().includes(v.toLowerCase())||!v?'':'none';});}
+function addHistItem(t){const l=document.getElementById('histList'),g=l.querySelector('.hgrp'),d=document.createElement('div');d.className='hit';d.innerHTML=`<span class="hd"></span>${t}`;d.onclick=()=>ask(t);l.insertBefore(d,g.nextSibling);}
+function openMod(id){document.getElementById(id).classList.add('open');}
+function closeMod(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.ov').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');}));
+function showToast(m){const o=document.querySelector('.toast');if(o)o.remove();const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>{t.style.transition='opacity .3s';t.style.opacity='0';},2700);setTimeout(()=>t.remove(),3100);}
+
+/* ══ INIT ══ */
+(function(){
+  // Sparks
+  const c=document.getElementById('sparks');
+  for(let i=0;i<25;i++){const s=document.createElement('div');s.className='sp';const z=Math.random()*3.5+1.5;s.style.cssText=`width:${z}px;height:${z}px;left:${Math.random()*100}%;animation-duration:${12+Math.random()*16}s;animation-delay:${Math.random()*22}s;opacity:${.1+Math.random()*.4}`;c.appendChild(s);}
+  // Intro
+  const stats=['Duke lidhur me Quran API...','AlQuran.cloud ✓ Aktive','Hadith CDN ✓ Aktive','Knowledge Base ✓ Aktive','Eidro Mufti AI gati! 🌙'];
+  let si=0;const iv=setInterval(()=>{if(si<stats.length)document.getElementById('istat').textContent=stats[si++];else clearInterval(iv);},520);
+  setTimeout(()=>document.getElementById('intro').classList.add('out'),3200);
+  setTimeout(()=>document.getElementById('intro').style.display='none',4000);
+  // Test APIs and update status chips
+  setTimeout(async()=>{
+    try{
+      const r=await fetch(`${QURAN_API}/ayah/1:1`,{signal:AbortSignal.timeout(5000)});
+      const dq=document.getElementById('dotQuran'),lq=document.getElementById('lblQuran');
+      if(r.ok){dq.className='dot';dq.style.background='var(--j3)';lq.textContent='AlQuran.cloud · Aktive';}
+      else{dq.className='dot err';lq.textContent='AlQuran.cloud · Gabim';}
+    }catch(e){document.getElementById('dotQuran').className='dot err';document.getElementById('lblQuran').textContent='AlQuran.cloud · Jo aktive';}
+    try{
+      const r=await fetch(`${HADITH_CDN}/eng-bukhari/1.json`,{signal:AbortSignal.timeout(5000)});
+      const dh=document.getElementById('dotHadith'),lh=document.getElementById('lblHadith');
+      if(r.ok){dh.className='dot';dh.style.background='var(--j3)';lh.textContent='Hadith CDN · Aktive';}
+      else{dh.className='dot err';lh.textContent='Hadith CDN · Gabim';}
+    }catch(e){document.getElementById('dotHadith').className='dot err';document.getElementById('lblHadith').textContent='Hadith CDN · Jo aktive';}
+  },3500);
+})();
+</script>
+</body>
+</html>
